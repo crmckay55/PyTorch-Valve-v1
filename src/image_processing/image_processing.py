@@ -1,3 +1,4 @@
+import config
 import transformations as t
 from os import listdir
 from os.path import isfile, join
@@ -6,12 +7,12 @@ from inspect import getmembers, isfunction
 import random
 
 in_path = '/model_pictures/originals_untagged/'
-out_path = '/model_pictures/originals_modified/'
+out_path = '../model_pictures/originals_modified/'
 transform_quantity = 5
 
 
 # get list of files in path
-file_list = [f for f in listdir(in_path) if isfile(join(in_path, f))]
+file_list = [f for f in listdir(config.FILE_IN_PATH) if isfile(join(config.FILE_IN_PATH, f))]
 
 # get list of modules in transformations.py that start with im_
 modules = getmembers(t, isfunction)     # find members of transformations that are functions
@@ -26,12 +27,12 @@ f = open('transformations.txt', 'w')
 for file in file_list:
 
     # open the original file
-    img = Image.open(in_path + file)
+    img = Image.open(config.FILE_IN_PATH + file)
     pic_name = file.rsplit('.', 1)
 
 
     # save an original copy in the destination folder
-    img.save(out_path + pic_name[0] + '_0_Orig.jpg')
+    img.save(config.FILE_IN_PATH + pic_name[0] + '_0_Orig.jpg')
 
     # perform transform_quantity transformations to each image
     for iterator in range(1, transform_quantity + 1, 1):
@@ -60,7 +61,7 @@ for file in file_list:
             current_transform_image = method_to_call(current_transform_image)
 
         # save file with original name plus iteration number
-        current_transform_image.save(out_path +
+        current_transform_image.save(config.FILE_OUT_PATH +
                     pic_name[0] + '_' +
                     str(number_of_transformations) + '_'  +
                     str(iterator) + '.jpg')

@@ -3,23 +3,23 @@ import cv2
 import torch
 import glob as glob
 from model import create_model
+import config
+
 # set the computation device
-device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+device = torch.device(config.COMPUTATION_DEVICE)
 # load the model and the trained weights
 model = create_model(num_classes=3).to(device)
 model.load_state_dict(torch.load(
-    '../model_outputs/model100.pth', map_location=device
+   config.MODEL_LOCATION, map_location=device
 ))
 model.eval()
 
 # directory where all the images are present
-DIR_TEST = '../model_test/source'
+DIR_TEST = config.VALIDATE_SOURCE
 test_images = glob.glob(f"{DIR_TEST}/*")
 print(f"Test instances: {len(test_images)}")
-# classes: 0 index is reserved for background
-CLASSES = [
-    'background', 'valve', 'gauge'
-]
+
+
 # define the detection threshold...
 # ... any detection having score below this will be discarded
 detection_threshold = 0.8
@@ -52,7 +52,7 @@ for i in range(len(test_images)):
         boxes = boxes[scores >= detection_threshold].astype(np.int32)
         draw_boxes = boxes.copy()
         # get all the predicited class names
-        pred_classes = [CLASSES[i] for i in outputs[0]['labels'].cpu().numpy()]
+        pred_classes = [config.CLASSES[i] for i in outputs[0]['labels'].cpu().numpy()]
 
         # draw the bounding boxes and write the class name on top of it
         for j, box in enumerate(draw_boxes):
@@ -66,7 +66,7 @@ for i in range(len(test_images)):
                         2, lineType=cv2.LINE_4)
         # cv2.imshow('Prediction', orig_image)
         # cv2.waitKey(1)
-        cv2.imwrite(f"../model_test/predictions/{image_name}.jpg", orig_image, )
+        cv2.imwrite(config.VALIDATE_PREDICTIONS + f"/{image_name}.jpg", orig_image, )
 
 
 
