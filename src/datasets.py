@@ -35,6 +35,7 @@ class PictureDataset(Dataset):
         image_resized = cv2.resize(image, (self.width, self.height))
         image_resized /= 255.0
 
+
         # capture the corresponding XML file for getting the annotations
         annot_filename = image_name[:-4] + '.xml'
         annot_file_path = os.path.join(self.dir_path, annot_filename)

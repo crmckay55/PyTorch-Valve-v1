@@ -11,9 +11,9 @@ VALIDATE_SOURCE = '../model_test/source'
 VALIDATE_PREDICTIONS = '../model_test/predictions'
 
 # paths for model training
-TRAIN_DIR = '/model_pictures/train'            # training images and XML files directory
+TRAIN_DIR = '../model_pictures/train'            # training images and XML files directory
 MODEL_LOCATION = '../model_outputs/model100.pth'
-VALID_DIR = '/model_pictures/test'              # validation images and XML files directory
+VALID_DIR = '../model_pictures/test'              # validation images and XML files directory
 
 # computational setup
 COMPUTATION_DEVICE = 'cuda'

@@ -35,6 +35,8 @@ for i in range(len(test_images)):
     image /= 255.0
     # bring color channels to front
     image = np.transpose(image, (2, 0, 1)).astype(np.float)
+
+
     # convert to tensor
     image = torch.tensor(image, dtype=torch.float).cuda()
     # add batch dimension
