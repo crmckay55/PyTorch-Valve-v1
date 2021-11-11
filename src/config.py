@@ -12,7 +12,7 @@ VALIDATE_PREDICTIONS = '../model_test/predictions'
 
 # paths for model training
 TRAIN_DIR = '../model_pictures/train'            # training images and XML files directory
-MODEL_LOCATION = '../model_outputs/model100.pth'
+MODEL_LOCATION = '../model_outputs/model100-lr001.pth'
 VALID_DIR = '../model_pictures/test'              # validation images and XML files directory
 
 # computational setup
@@ -22,6 +22,10 @@ BATCH_SIZE = 9  # increase / decrease according to GPU memeory - 9 works for GeF
 RESIZE_TO = 640  # resize the image for training and transforms - TODO: how big can we go?  is bigger better?
 NUM_EPOCHS = 100  # number of epochs to train for - TODO: how do epochs relate to training quality (output graphs) - other parameters?
 
+LEARNING_RATE_START = 0.001
+LEARNING_RATE_DECAY = 0.95   # starting point for exponential decay of learning rate
+MOMENTUM_START = 0.9
+WEIGHT_DECAY = 0.0005
 
 # classes: 0 index is reserved for background
 NUM_CLASSES = 3
@@ -32,6 +36,6 @@ CLASSES = ['background', 'valve', 'guage']
 VISUALIZE_TRANSFORMED_IMAGES = False
 
 # location to save model and plots
-OUT_DIR = '/model_outputs/'
+OUT_DIR = '../model_outputs/'
 SAVE_PLOTS_EPOCH = 2 # save loss plots after these many epochs
 SAVE_MODEL_EPOCH = 2  # save model after these many epochs

@@ -1,3 +1,4 @@
+import config
 from config import DEVICE, NUM_CLASSES, NUM_EPOCHS, OUT_DIR
 from config import VISUALIZE_TRANSFORMED_IMAGES
 from config import SAVE_PLOTS_EPOCH, SAVE_MODEL_EPOCH
@@ -8,6 +9,7 @@ from datasets import train_loader, valid_loader
 import torch
 import matplotlib.pyplot as plt
 import time
+import math
 plt.style.use('ggplot')
 
 
@@ -74,7 +76,7 @@ if __name__ == '__main__':
     # get the model parameters
     params = [p for p in model.parameters() if p.requires_grad]
     # define the optimizer
-    optimizer = torch.optim.SGD(params, lr=0.001, momentum=0.9, weight_decay=0.0005)    # TODO: can I modify this?
+    optimizer = torch.optim.SGD(params, lr=config.LEARNING_RATE_START, momentum=config.MOMENTUM_START, weight_decay=config.WEIGHT_DECAY)    # TODO: can I modify this?
     # initialize the Averager class
     train_loss_hist = Averager()
     val_loss_hist = Averager()
@@ -133,5 +135,13 @@ if __name__ == '__main__':
             figure_1.savefig(f"{OUT_DIR}/train_loss_{epoch + 1}.png")
             figure_2.savefig(f"{OUT_DIR}/valid_loss_{epoch + 1}.png")
             torch.save(model.state_dict(), f"{OUT_DIR}/model{epoch + 1}.pth")
+
+        # INFO: using a simple exponential decay - in CONFIG
+        for g in optimizer.param_groups:
+            # starting point * decay rate ^ epoch#
+            g['lr'] = config.LEARNING_RATE_START * math.pow(config.LEARNING_RATE_DECAY, epoch)
+
+        # TODO: should we do any scheduled changes of momentum?
+        # TODO: should we do any scheduled changes of weight_decay?
 
         plt.close('all')
